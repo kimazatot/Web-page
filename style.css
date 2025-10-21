@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -6,7 +8,7 @@
 }
 
 body {
-    background: linear-gradient(135deg, #f8f9fa, #e3f2fd);
+    background: linear-gradient(135deg, #89f7fe, #66a6ff);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -15,36 +17,42 @@ body {
 
 .card {
     background-color: white;
-    border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    max-width: 400px;
-    padding: 30px;
+    border-radius: 25px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    max-width: 420px;
+    padding: 35px;
     text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    animation: fadeIn 1.2s ease;
 }
 
 .card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    transform: translateY(-10px);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.2);
 }
 
 .profile-image img {
-    width: 120px;
-    height: 120px;
+    width: 130px;
+    height: 130px;
     border-radius: 50%;
     object-fit: cover;
-    border: 4px solid #007bff;
+    border: 4px solid #66a6ff;
     margin-bottom: 15px;
+    transition: transform 0.4s ease;
+}
+
+.profile-image img:hover {
+    transform: rotate(5deg) scale(1.05);
 }
 
 .name {
-    font-size: 1.8em;
-    color: #333;
-    margin-bottom: 5px;
+    font-size: 1.9em;
+    color: #222;
+    font-weight: 600;
 }
 
 .title {
-    font-size: 1em;
+    font-size: 1.1em;
     color: #007bff;
     margin-bottom: 20px;
 }
@@ -52,17 +60,18 @@ body {
 .bio {
     color: #555;
     font-size: 0.95em;
-    margin-bottom: 20px;
-    line-height: 1.5;
+    margin-bottom: 25px;
+    line-height: 1.6;
 }
 
 .section-title {
-    color: #222;
+    color: #333;
     font-size: 1.1em;
-    margin: 15px 0 10px;
-    border-bottom: 2px solid #007bff;
+    margin: 20px 0 10px;
+    border-bottom: 3px solid #66a6ff;
     display: inline-block;
-    padding-bottom: 3px;
+    padding-bottom: 4px;
+    font-weight: 600;
 }
 
 .interests, .achievements {
@@ -70,26 +79,49 @@ body {
     text-align: left;
     color: #444;
     font-size: 0.9em;
-    margin: 10px 0 15px;
+    margin: 10px 0 20px;
+    padding: 0 15px;
 }
 
 .interests li, .achievements li {
     margin-bottom: 8px;
+    position: relative;
 }
 
 .social-links {
     display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 25px;
 }
 
-.social-links a {
+.btn {
+    display: inline-block;
     text-decoration: none;
-    color: #007bff;
-    font-weight: bold;
-    transition: color 0.3s;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: 600;
+    color: white;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.social-links a:hover {
-    color: #0056b3;
+.btn:hover {
+    transform: scale(1.07);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
+
+.btn.email {
+    background: linear-gradient(45deg, #ff8a65, #ff7043);
+}
+
+.btn.github {
+    background: linear-gradient(45deg, #24292e, #444);
+}
+
+.btn.linkedin {
+    background: linear-gradient(45deg, #0077b5, #00a0dc);
+}
+
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(20px);}
+    to {opacity: 1; transform: translateY(0);}
