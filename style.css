@@ -32,8 +32,8 @@ body {
 }
 
 .profile-image img {
-    width: 130px;
-    height: 130px;
+    width: 100px;
+    height: 100px;
     max-width: 130px;
     max-height: 130px;
     border-radius: 50%;
@@ -127,4 +127,5 @@ body {
 @keyframes fadeIn {
     from {opacity: 0; transform: translateY(20px);}
     to {opacity: 1; transform: translateY(0);}
+
 
