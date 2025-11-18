@@ -114,7 +114,7 @@ body.dark-theme .theme-toggle {
     border-radius: 50%;
     margin: 0 auto 24px;
     border: 6px solid #66a6ff;
-    background-image: url('./pic/IMG_20251021_095546_010.jpg');
+    background: url('./pic/IMG_20251021_095546_010.jpg');
     background-size: cover;
     background-position: top center;
     transition: all 0.4s ease;
