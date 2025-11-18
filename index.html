@@ -62,6 +62,34 @@
                 <span class="modal-close">×</span>
                 <img src="рекомендация.png" alt="Full Recommendation Letter">
             </div>
+
+            <h2 class="section-title">Moments & Graduation</h2>
+
+            <div class="photo-slider">
+                <div class="photo-track">
+                    <div class="photo-slide">
+                        <img src="hackathon.jpg" alt="Hackathon">
+                        <div class="photo-caption">It was my first hackathon experience outside of any courses</div>
+                    </div>
+                    <div class="photo-slide">
+                        <img src="itc.jpg" alt="First programming course">
+                        <div class="photo-caption">When I was 13 — my first programming courses (2020-2021)</div>
+                    </div>
+                    <div class="photo-slide">
+                        <img src="makers.jpg" alt="Makers College">
+                        <div class="photo-caption">Makers College — the beginning of a new chapter (2023-2024)</div>
+                    </div>
+                    <div class="photo-slide">
+                        <img src="люди.jpg" alt="Korean">
+                        <div class="photo-caption">When i was learning korean, i had a really good friends! Most of them in Korea right now.</div>
+                    </div>
+                </div>
+
+                <button class="photo-prev">‹</button>
+                <button class="photo-next">›</button>
+                <div class="photo-dots"></div>
+            </div>
+
         </div>
     </div>
 
@@ -77,7 +105,6 @@
                 toggleBtn.textContent = isDark ? "🌞" : "🌙";
                 localStorage.setItem("theme", isDark ? "dark" : "light");
             };
-
             if (localStorage.getItem("theme") === "dark") body.classList.add("dark-theme");
             updateTheme();
 
@@ -86,24 +113,81 @@
                 updateTheme();
             });
 
-            recImg.addEventListener("click", () => {
-                modal.classList.add("active");
-                body.style.overflow = "hidden";
-            });
+            if (recImg && modal) {
+                recImg.addEventListener("click", () => {
+                    modal.classList.add("active");
+                    body.style.overflow = "hidden";
+                });
 
-            modal.addEventListener("click", (e) => {
-                if (e.target === modal || e.target.classList.contains("modal-close")) {
-                    modal.classList.remove("active");
-                    body.style.overflow = "";
-                }
-            });
+                modal.addEventListener("click", (e) => {
+                    if (e.target === modal || e.target.classList.contains("modal-close")) {
+                        modal.classList.remove("active");
+                        body.style.overflow = "";
+                    }
+                });
 
-            document.addEventListener("keydown", (e) => {
-                if (e.key === "Escape" && modal.classList.contains("active")) {
-                    modal.classList.remove("active");
-                    body.style.overflow = "";
+                document.addEventListener("keydown", (e) => {
+                    if (e.key === "Escape" && modal.classList.contains("active")) {
+                        modal.classList.remove("active");
+                        body.style.overflow = "";
+                    }
+                });
+            }
+
+            const photoTrack = document.querySelector('.photo-track');
+            const photoSlides = document.querySelectorAll('.photo-slide');
+            const photoPrev = document.querySelector('.photo-prev');
+            const photoNext = document.querySelector('.photo-next');
+            const photoDotsContainer = document.querySelector('.photo-dots');
+
+            if (photoTrack && photoSlides.length > 0) {
+                let photoIndex = 0;
+
+                photoDotsContainer.innerHTML = '';
+                photoSlides.forEach((_, i) => {
+                    const dot = document.createElement('span');
+                    dot.classList.add('dot');
+                    if (i === 0) dot.classList.add('active');
+                    dot.addEventListener('click', () => goToPhoto(i));
+                    photoDotsContainer.appendChild(dot);
+                });
+                const photoDots = document.querySelectorAll('.photo-dots .dot');
+
+                function updatePhotoSlider() {
+                    photoTrack.style.transform = `translateX(-${photoIndex * 100}%)`;
+                    photoDots.forEach((dot, i) => dot.classList.toggle('active', i === photoIndex));
                 }
-            });
+
+                function nextPhoto() {
+                    photoIndex = (photoIndex + 1) % photoSlides.length;
+                    updatePhotoSlider();
+                }
+
+                function prevPhoto() {
+                    photoIndex = (photoIndex - 1 + photoSlides.length) % photoSlides.length;
+                    updatePhotoSlider();
+                }
+
+                function goToPhoto(n) {
+                    photoIndex = n;
+                    updatePhotoSlider();
+                }
+
+                photoPrev?.addEventListener('click', prevPhoto);
+                photoNext?.addEventListener('click', nextPhoto);
+
+                let autoSlide = setInterval(nextPhoto, 6000);
+                document.querySelector('.photo-slider').addEventListener('mouseenter', () => clearInterval(autoSlide));
+                document.querySelector('.photo-slider').addEventListener('mouseleave', () => autoSlide = setInterval(nextPhoto, 6000));
+
+                let touchStartX = 0;
+                photoTrack.addEventListener('touchstart', e => touchStartX = e.touches[0].clientX, { passive: true });
+                photoTrack.addEventListener('touchend', e => {
+                    const touchEndX = e.changedTouches[0].clientX;
+                    if (touchStartX - touchEndX > 50) nextPhoto();
+                    if (touchEndX - touchStartX > 50) prevPhoto();
+                });
+            }
         });
     </script>
 </body>

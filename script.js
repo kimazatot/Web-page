@@ -52,3 +52,46 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 }
+
+const photoTrack = document.querySelector('.photo-track');
+const photoSlides = document.querySelectorAll('.photo-slide');
+const photoPrev = document.querySelector('.photo-prev');
+const photoNext = document.querySelector('.photo-next');
+const photoDotsContainer = document.querySelector('.photo-dots');
+
+let photoIndex = 0;
+
+photoSlides.forEach((_, i) => {
+    const dot = document.createElement('span');
+    dot.classList.add('dot');
+    if (i === 0) dot.classList.add('active');
+    dot.addEventListener('click', () => goToPhoto(i));
+    photoDotsContainer.appendChild(dot);
+});
+
+const photoDots = document.querySelectorAll('.photo-dots .dot');
+
+function updatePhotoSlider() {
+    photoTrack.style.transform = `translateX(-${photoIndex * 100}%)`;
+    photoDots.forEach((dot, i) => dot.classList.toggle('active', i === photoIndex));
+}
+
+function nextPhoto() {
+    photoIndex = (photoIndex + 1) % photoSlides.length;
+    updatePhotoSlider();
+}
+
+function prevPhoto() {
+    photoIndex = (photoIndex - 1 + photoSlides.length) % photoSlides.length;
+    updatePhotoSlider();
+}
+
+function goToPhoto(n) {
+    photoIndex = n;
+    updatePhotoSlider();
+}
+
+photoNext.addEventListener('click', nextPhoto);
+photoPrev.addEventListener('click', prevPhoto);
+
+setInterval(nextPhoto, 6000);
