@@ -33,3 +33,22 @@ document.addEventListener("DOMContentLoaded", () => {
         updateThemeIcon();
     });
 });
+const recImg = document.getElementById('rec-img');
+const modal = document.getElementById('rec-modal');
+const modalImg = document.getElementById('modal-img');
+const modalClose = document.getElementsByClassName('modal-close')[0];
+
+recImg.onclick = function() {
+    modal.style.display = "block";
+    modalImg.src = this.src;
+}
+
+modalClose.onclick = function() {
+    modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+}
