@@ -80,8 +80,8 @@
                         <div class="photo-caption">Makers College — the beginning of a new chapter (2023-2024)</div>
                     </div>
                     <div class="photo-slide">
-                        <img src="./pic/люди.jpg" alt="Korean">
-                        <div class="photo-caption">When i was learning korean, i had a really good friends! Most of them in Korea right now.</div>
+                        <img src="./pic/люди.jpg" alt="Korean friends">
+                        <div class="photo-caption">When I was learning Korean, I had really good friends! Most of them in Korea now.</div>
                     </div>
                 </div>
 
@@ -95,10 +95,10 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            console.log("DOM loaded – initializing scripts");
+
             const body = document.body;
             const toggleBtn = document.getElementById("toggle-theme");
-            const modal = document.getElementById("rec-modal");
-            const recImg = document.getElementById("rec-img");
 
             const updateTheme = () => {
                 const isDark = body.classList.contains("dark-theme");
@@ -107,86 +107,78 @@
             };
             if (localStorage.getItem("theme") === "dark") body.classList.add("dark-theme");
             updateTheme();
-
             toggleBtn.addEventListener("click", () => {
                 body.classList.toggle("dark-theme");
                 updateTheme();
             });
 
+            const modal = document.getElementById("rec-modal");
+            const recImg = document.getElementById("rec-img");
             if (recImg && modal) {
-                recImg.addEventListener("click", () => {
+                recImg.onclick = () => {
                     modal.classList.add("active");
                     body.style.overflow = "hidden";
-                });
-
-                modal.addEventListener("click", (e) => {
+                };
+                modal.onclick = (e) => {
                     if (e.target === modal || e.target.classList.contains("modal-close")) {
                         modal.classList.remove("active");
                         body.style.overflow = "";
                     }
-                });
-
-                document.addEventListener("keydown", (e) => {
-                    if (e.key === "Escape" && modal.classList.contains("active")) {
+                };
+                document.onkeydown = (e) => {
+ if (e.key === "Escape" && modal.classList.contains("active")) {
                         modal.classList.remove("active");
                         body.style.overflow = "";
                     }
-                });
+                };
             }
 
-            const photoTrack = document.querySelector('.photo-track');
-            const photoSlides = document.querySelectorAll('.photo-slide');
-            const photoPrev = document.querySelector('.photo-prev');
-            const photoNext = document.querySelector('.photo-next');
-            const photoDotsContainer = document.querySelector('.photo-dots');
+            const photoSlider = document.querySelector(".photo-slider");
+            const photoTrack = document.querySelector(".photo-track");
+            const photoPrev = document.querySelector(".photo-prev");
+            const photoNext = document.querySelector(".photo-next");
+            const photoDotsContainer = document.querySelector(".photo-dots");
 
-            if (photoTrack && photoSlides.length > 0) {
-                let photoIndex = 0;
+            if (photoTrack && photoPrev && photoNext && photoDotsContainer) {
+                console.log("Photo slider initialized");
+                const slides = document.querySelectorAll(".photo-slide");
+                let index = 0;
 
-                photoDotsContainer.innerHTML = '';
-                photoSlides.forEach((_, i) => {
-                    const dot = document.createElement('span');
-                    dot.classList.add('dot');
-                    if (i === 0) dot.classList.add('active');
-                    dot.addEventListener('click', () => goToPhoto(i));
+                photoDotsContainer.innerHTML = "";
+                slides.forEach((_, i) => {
+                    const dot = document.createElement("span");
+                    dot.classList.add("dot");
+                    if (i === 0) dot.classList.add("active");
+                    dot.onclick = () => goTo(i);
                     photoDotsContainer.appendChild(dot);
                 });
-                const photoDots = document.querySelectorAll('.photo-dots .dot');
+                const dots = document.querySelectorAll(".photo-dots .dot");
 
-                function updatePhotoSlider() {
-                    photoTrack.style.transform = `translateX(-${photoIndex * 100}%)`;
-                    photoDots.forEach((dot, i) => dot.classList.toggle('active', i === photoIndex));
-                }
+                const update = () => {
+                    photoTrack.style.transform = `translateX(-${index * 100}%)`;
+                    dots.forEach((d, i) => d.classList.toggle("active", i === index));
+                };
 
-                function nextPhoto() {
-                    photoIndex = (photoIndex + 1) % photoSlides.length;
-                    updatePhotoSlider();
-                }
+                const next = () => { index = (index + 1) % slides.length; update(); };
+                const prev = () => { index = (index - 1 + slides.length) % slides.length; update(); };
+                const goTo = (n) => { index = n; update(); };
 
-                function prevPhoto() {
-                    photoIndex = (photoIndex - 1 + photoSlides.length) % photoSlides.length;
-                    updatePhotoSlider();
-                }
+                photoPrev.onclick = prev;
+                photoNext.onclick = next;
 
-                function goToPhoto(n) {
-                    photoIndex = n;
-                    updatePhotoSlider();
-                }
+                let auto = setInterval(next, 6000);
+                photoSlider.onmouseenter = () => clearInterval(auto);
+                photoSlider.onmouseleave = () => auto = setInterval(next, 6000);
 
-                photoPrev?.addEventListener('click', prevPhoto);
-                photoNext?.addEventListener('click', nextPhoto);
-
-                let autoSlide = setInterval(nextPhoto, 6000);
-                document.querySelector('.photo-slider').addEventListener('mouseenter', () => clearInterval(autoSlide));
-                document.querySelector('.photo-slider').addEventListener('mouseleave', () => autoSlide = setInterval(nextPhoto, 6000));
-
-                let touchStartX = 0;
-                photoTrack.addEventListener('touchstart', e => touchStartX = e.touches[0].clientX, { passive: true });
-                photoTrack.addEventListener('touchend', e => {
-                    const touchEndX = e.changedTouches[0].clientX;
-                    if (touchStartX - touchEndX > 50) nextPhoto();
-                    if (touchEndX - touchStartX > 50) prevPhoto();
-                });
+                let startX = 0;
+                photoTrack.ontouchstart = e => startX = e.touches[0].clientX;
+                photoTrack.ontouchend = e => {
+                    const endX = e.changedTouches[0].clientX;
+                    if (startX - endX > 50) next();
+                    if (endX - startX > 50) prev();
+                };
+            } else {
+                console.error("Photo slider elements not found!");
             }
         });
     </script>
